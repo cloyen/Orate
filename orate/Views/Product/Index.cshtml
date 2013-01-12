@@ -1,0 +1,30 @@
+﻿<table>
+    <thead>
+        <tr> 
+            <th> Identifier </th>
+            <th> Name </th>
+            <th> Quantity </th>
+            <th> Discontinued </th>
+            <th> Category </th>            
+            <th> # edit #</t>h
+            <th> - Delete -</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach( var produto in Model)
+        {
+           <tr>
+               <td>@produto.Id</td>
+               <td>@produto.Name</td>  
+               <td>@produto.Quantity</td>              
+               <td>@produto.Discontinued</td>
+               <td>@produto.Category.Name</td>               
+               <th>@Html.RouteLink("-Edit-","Editar",new {id= produto.Id})</th>
+               <th>@Html.RouteLink("-Delete-","Delete",new {id= produto.Id})</th>
+               </tr>             
+        }
+              
+    </tbody>
+
+
+</table>

@@ -1,0 +1,10 @@
+﻿@{
+    ViewBag.Title = "LogIn";
+}
+
+<h2>Write your Nick and Password</h2>
+<form name="LogIn" method="post" action="../Account/LogIn">
+<label> Nick Name </label><input type="text" size="40" maxlength="20" name="user.nick"/>
+<label> Password </label><input type="password" size="40" maxlength="20" name="user.password"/>
+<input type="submit" name="LogIn" value="logIn" />
+</form>

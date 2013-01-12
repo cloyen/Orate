@@ -1,0 +1,23 @@
+﻿@{
+    ViewBag.Title = "Edit";
+}
+
+<h2>Edit The products</h2>
+
+<form name="CadastrarProduct" action="../Product/Salvar"  method="post">
+Id: <input name="product.Id" type="text" maxlength="120" size="80" value="@Model.Id" readonly="true" />
+Name:<input name="product.Name" type="text" maxlength="120" size="80" value="@Model.Name" />
+Quantity:<input name="product.Quantity" type="text" maxlength="20" size="80" value="@Model.Quantity" />
+Discontinued:<input name="product.Discontinued" type="text" maxlength="80" size="80" value="@Model.Discontinued" />
+<label>Discontinued:<select name="product.Discontinued">
+<option Value="Yes" >Yes</option>
+<option Value="No">No</option>
+</select>
+
+<label>Category:<select name="product.Category.Id">
+<option Value="@Model.Category.Id">@Model.Category.Name </option>
+</select>
+    <input type="submit" name="Send" value="send" />
+    <input type="reset" name="Clear" value="clear" />
+    </label>
+    </form>

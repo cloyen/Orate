@@ -1,0 +1,24 @@
+﻿@{
+    ViewBag.Title = "Include";
+}
+
+<h2>Include new products</h2>
+
+<form name="CadastrarProduct" action="../Product/Salvar" method="post">
+    Name:<input name="product.Name" type="text" maxlength="120" size="80" />
+     Quantity:<input name="product.Quantity" type="text" maxlength="20" size="80" />
+    <label>Discontinued:</label><select name="product.Discontinued">
+        <option value="Yes">Yes</option>
+        <option value="No">No</option>
+    </select>
+    
+    <label>Category:</label><select name="product.Category.Id">
+        @foreach (var category in Model)
+        {<option Value="@category.Id">@category.Name </option>    
+        }
+    </select>
+    
+    <input type="submit" name="Send" value="Send" />
+    <input type="reset" name="Clear" value="reset" />
+
+</form>
