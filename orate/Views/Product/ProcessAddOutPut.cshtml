@@ -116,7 +116,7 @@
                         $("#itens tbody").append("<tr>" +
                         "<td>" + quantity.val() + "</td>" +
                         "</tr>");
-
+                        teste();
                         $(this).dialog("close");
                     }
                 },
@@ -137,7 +137,10 @@
     });
 
   
-
+    function teste() {
+       
+        alert($("#quantity").val());
+    }
       function atualizaQuantidade(productId) {
         var elementoQuantidade = $("#quantity_" + productId);
         elementoQuantidade.html(product.Quantity);

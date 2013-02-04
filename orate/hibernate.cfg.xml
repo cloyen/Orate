@@ -17,7 +17,7 @@
                      Data Source=(DESCRIPTION=
                      
                      (ADDRESS_LIST=(ADDRESS=
-                           (PROTOCOL=TCP)(HOST=ORACLE-PC)(PORT=1521)))
+                           (PROTOCOL=TCP)(HOST=MNASCIMENTO-PC)(PORT=1521)))
                            (CONNECT_DATA=(SERVICE_NAME= XE)));
                      Pooling=true;
                      Enlist=false;
