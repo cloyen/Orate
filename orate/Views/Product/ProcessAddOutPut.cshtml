@@ -50,14 +50,14 @@
 <div id="dialog-form" title="Quantity on given outPut">
     <p class="validateTips">All form fields are required.</p>
 <ul style="list-style:none;"><fieldset>
-     <form id="itemOutPutDialog" name="itemOutPutDialog"  method="post">
+     <form id="itemOutPutDialog" name="itemOutPutDialog"  method="post" action="../Product/ProcessItensOut">
        <li>
             <label for="quantityName">Product</label>
 
-            <select name="product.Id">
+            <select name="productId">
                 @foreach (var product in Model[1])
                          {
-                    <option Value="@product.Id">@product.Name </option> }
+                    <option Value="@product.Id" id="product">@product.Name </option> }
             </select><br />
            </li><li>
             <label for="quantityOut">OutPut in ?<input type="text" name="quantity" id="quantity" size="15" class="text ui-widget-content ui-corner-all" /></label>
@@ -113,10 +113,7 @@
                     bValid = bValid && checkRegexp(quantity, /([0-9])/, "Quantity may consist of 0-9, underscores, begin with a letter.");
 
                     if (bValid) {
-                        $("#itens tbody").append("<tr>" +
-                        "<td>" + quantity.val() + "</td>" +
-                        "</tr>");
-                        teste();
+                        ProcessItens();                        
                         $(this).dialog("close");
                     }
                 },
@@ -137,21 +134,25 @@
     });
 
   
-    function teste() {
-       
-        alert($("#quantity").val());
-    }
-      function atualizaQuantidade(productId) {
-        var elementoQuantidade = $("#quantity_" + productId);
-        elementoQuantidade.html(product.Quantity);
-    }
-    function decrementaQuantidade(productId) {
+    function ProcessItens() {
         var params = {
-            productId: productId
+            quantity: $("#quantity").val(),
+            productId: $("#product").val()
         };
-        $.post("@Url.Action("DecrementaQuantidade", "Product")", params, atualizaQuantidade);
-        return false;
+               
+        $.ajax({
+            type: "POST",
+            url:"@Url.Action("ProcessItensOut")",            
+            success: ProcessItens,
+            data: params,
+            dataType: "html"
+        }).fail(test());
     }
+ 
+    function test() {
 
-
+        alert("bobo");
+    }
+  
+  
 </script>

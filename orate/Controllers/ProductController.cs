@@ -7,6 +7,7 @@ using System.Web.Mvc;
 using orate.Models;
 using orate.Dao;
 using orate.Filters;
+
 namespace orate.Controllers
 {
     /*[author] mnascimento
@@ -49,7 +50,7 @@ namespace orate.Controllers
         {
             CategoryDao dao = CategoryDao.GetInstance();
             IList<Category> categories = dao.ListAll();
-
+            
             return View(categories);
         }
 
@@ -116,20 +117,6 @@ namespace orate.Controllers
             return View(companies);
         }
 
-        /*
-         * This method is for to work with Json
-         */
-        public ActionResult DecrementaQuantidade(double productId)
-        {
-            ProductDao dao = ProductDao.GetInstance();
-            Product productobj = dao.GetById(productId);
-            if (productobj.Quantity > 0)
-            {
-                productobj.Quantity--;
-            }
-            dao.Update(productobj);
-            return Json(productobj);
-        }
 
         /* This method will do a Give out of products
          * this method contain the client business and 
@@ -143,17 +130,18 @@ namespace orate.Controllers
 
             outPut.Company = company;
             outPut.Date = date;
-            
-          //  if ((outPut != null) && (dao.getOutPutByDate(date) == null))
-            if((Session["outPut"] == null) && (outPut!= null))
-            {   dao.add(outPut);
+
+            //  if ((outPut != null) && (dao.getOutPutByDate(date) == null))
+            if ((Session["outPut"] == null) && (outPut != null))
+            {
+                dao.add(outPut);
                 Session["outPut"] = dao.getOutPutByDate(date);
 
-            } 
+            }
             outPut = (OutPut)Session["outPut"];
             List<Product> products = ProductDao.GetInstance().ListAll();
             Object[] obj = new Object[2] { outPut, products };
-            
+
             return View(obj);
         }
 
@@ -176,35 +164,35 @@ namespace orate.Controllers
 
 
         [HttpPost]
-        public ActionResult ProcessGiveOut(ItemOutPut ItemOutPut, OutPut OutPut)
+        public ActionResult ProcessItensOut(double productId, double quantity)
         {
             // treatment about update quantity of stock products
             ProductDao dao = ProductDao.GetInstance();
-            Product product = dao.GetById(ItemOutPut.Product.Id);
+            Product product = dao.GetById(productId);
             //treatment about of save outPut 
-            List<ItemOutPut> itensOfList = new List<ItemOutPut>();
-            ItemOutPut.OutPut = OutPut;
-            ItemOutPut.Product = product;
+            List<Product> itensOfList = new List<Product>();
+            
 
-
-            Company company = CompanyDao.getInstance().getById(OutPut.Company.Id);
-            ItemOutPut.OutPut.Company = company;
-            itensOfList.Add(ItemOutPut);
-
-            if ((ItemOutPut.Product.Quantity - ItemOutPut.Quantity) >= 0)
+            if (Session["itensOfList"] == null)
             {
-                double number = ItemOutPut.Product.Quantity;
-                ItemOutPut.Product.Quantity = (number - ItemOutPut.Quantity);
+                double qnt = product.Quantity;
+                product.Quantity = qnt - quantity;
+                itensOfList.Add(product);
+                Session["itensOfList"] = itensOfList;
 
-                dao.Update(product);
             }
+            else
+                if (Session["itensOfList"] != null)
+                {
+                    double qnt = product.Quantity;
+                    product.Quantity = qnt - quantity;
+                    itensOfList = (List<Product>)Session["itensOfList"];
+                    itensOfList.Add(product);
+                    Session["itensOfList"] = itensOfList;
+                }
 
-
-            return RedirectToAction("IniciarSaida", "Product");
+            return Json(new { nome = "Rafael", idade = "22" });
 
         }
-
-
-
     }
 }
