@@ -1,0 +1,152 @@
+﻿@{
+    ViewBag.Title = "Put Out";
+}
+
+
+
+
+<div id="company-choose">
+    <h1>Make one Out</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th colspan="2">&nbsp;</th>
+                <th>Name of Company</th>
+                <th>Date </th>
+                <th>Include Item</th>
+            </tr>
+        </thead>
+        <tbody>
+
+            <tr>
+                <form name="ItemOutPutsForm" action="../Product/ProcessAddOutPut" method="post">
+
+                <td>
+                    <label>@Model[0].Id</label>
+                <td>
+                <td>
+                    <label>Company:</label>
+                <td>
+                    <select name="companyId">
+                        <option Value="@Model[0].Company.Id">@Model[0].Company.Name </option>
+
+                    </select></td>
+                <td>
+                    <input type="date" name="date" value="@Model[0].Date" readonly="true"/></td>
+                <td>
+                    <button id="alter-quantity" name="button" class="">+ </button>
+                </td>
+
+                <td>
+                    <div id="itens">&nbsp;</div>
+                </td>
+            </tr>
+            </form>
+        </tbody>
+    </table>
+</div>
+<!--On here is finish of div company-choose -->
+
+<div id="dialog-form" title="Alter Quantity">
+    <p class="validateTips">All form fields are required.</p>
+    <form id="itemOutPutDialog" name="itemOutPutDialog"  method="post">
+        <fieldset>
+            <label for="quantity">Product</label>
+
+            <select name="product.Id">
+                @foreach (var product in Model[1])
+                         {
+                    <option Value="@product.Id">@product.Name </option> }
+            </select><br />
+
+            <label for="quantity">Quantity in Out<input type="text" name="quantity" id="quantity" class="text ui-widget-content ui-corner-all" /></label>
+
+        </fieldset>
+    </form>
+</div>
+
+
+<script type="text/javascript">
+    $(function () {
+        var quantity = $("#quantity"),
+        allFields = $([]).add(quantity),
+        tips = $(".validateTips");
+        function updateTips(t) {
+            tips
+            .text(t)
+            .addClass("ui-state-highlight");
+            setTimeout(function () {
+                tips.removeClass("ui-state-highlight", 1500);
+            }, 500);
+        }
+        function checkLength(o, n, min, max) {
+            if (o.val().length > max || o.val().length < min) {
+                o.addClass("ui-state-error");
+                updateTips("Length of " + n + " must be between " +
+                min + " and " + max + ".");
+                return false;
+            } else {
+                return true;
+            }
+        }
+        function checkRegexp(o, regexp, n) {
+            if (!(regexp.test(o.val()))) {
+                o.addClass("ui-state-error");
+                updateTips(n);
+                return false;
+            } else {
+                return true;
+            }
+        }
+        $("#dialog-form").dialog({
+            autoOpen: false,
+            height: 300,
+            width: 350,
+            modal: true,
+            buttons: {
+                Send: function () {
+                    var bValid =
+                    allFields.removeClass("ui-state-error");
+                    bValid = bValid && checkLength(quantity, "quantity", 1, 16);
+                    bValid = bValid && checkRegexp(quantity, /([0-9])/, "Quantity may consist of 0-9, underscores, begin with a letter.");
+
+                    if (bValid) {
+                        $("#itens tbody").append("<tr>" +
+                        "<td>" + quantity.val() + "</td>" +
+                        "</tr>");
+
+                        $(this).dialog("close");
+                    }
+                },
+                Cancel: function () {
+                    $(this).dialog("close");
+                }
+            },
+            close: function () {
+                allFields.val("").removeClass("ui-state-error");
+            }
+        });
+       
+    });
+
+    $("#alter-quantity")
+       .button()
+       .click(function () {
+           $("#dialog-form").dialog("open");
+       });
+
+      function atualizaQuantidade(productId) {
+        var elementoQuantidade = $("#quantity_" + productId);
+        elementoQuantidade.html(product.Quantity);
+    }
+    function decrementaQuantidade(productId) {
+        var params = {
+            productId: productId
+        };
+        $.post("@Url.Action("DecrementaQuantidade", "Product")", params, atualizaQuantidade);
+        return false;
+    }
+
+
+</script>

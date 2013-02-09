@@ -1,0 +1,58 @@
+﻿@{
+    ViewBag.Title = "Put Out";
+}
+<div id="company-choose">
+    <p>Where are going to products ??
+        <br />
+        choose company or client into select option</p>
+    <table>
+        <thead>
+            <tr><th colspan="2">Name </th>
+                <th>Date </th>
+                <th>Comand </th>
+            </tr>
+        </thead>
+        <tbody>
+           
+            <tr>
+                <form name="OutPuts" action="../Product/ProcessAddOutPut" method="post">
+                 <td>
+                    <label>Company:</label>
+                <td>
+                    <select name="companyId">
+                        @foreach (var company in Model)
+        {<option Value="@company.Id">@company.Name </option>    
+        }
+                    </select></td>
+                <td>
+                    <input type="date" name="date" value="@DateTime.Now" readonly="true"/></td>
+                <td>
+                    <input type="submit" name="Edit" value="Edit" id="button_"
+                        class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only" /></td>
+
+            </tr>
+           
+        </tbody>
+    </table>
+</div>
+<!--On here is finish of div company-choose -->
+
+
+<!--
+</div>
+<!--On here is finish of div out-put-products  -->
+<script type="text/javascript">
+    function atualizaQuantidade(productId) {
+        var elementoQuantidade = $("#quantity_" + productId);
+        elementoQuantidade.html(product.Quantity);
+    }
+    function decrementaQuantidade(productId) {
+        var params = {
+            productId: productId
+        };
+        $.post("@Url.Action("DecrementaQuantidade", "Product")", params, atualizaQuantidade);
+        return false;
+    }
+
+
+</script>

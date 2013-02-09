@@ -9,8 +9,8 @@
     <property name="Name" column="Nome" type="String"/>
    
     <bag name="Products" cascade="save-update" lazy="false" >
-            <key column="category" />
-            <one-to-many class="Product" />
+       <key column="category" />
+       <one-to-many class="Product" />
     </bag>
     
   </class>

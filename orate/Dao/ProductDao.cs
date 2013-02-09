@@ -121,8 +121,7 @@ namespace orate.Dao
                     IQuery query = session.CreateQuery("Select p.* from Product p where p.id=" + categoryId);
                     query.List(Lista);
                     return Lista;
-                    session.Close();
-                    session.Dispose();
+                   
                 }
             }
 
@@ -140,7 +139,8 @@ namespace orate.Dao
                 using (ISession session = ProductDaoSession.OpenSession())
                 {
                     IQuery query = session.CreateQuery("select p from Product p");
-                    query.List(Lista);          
+                    query.List(Lista); 
+                    
                 }
                 return Lista;
             }

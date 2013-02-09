@@ -1,0 +1,147 @@
+﻿<div id="out-put-products">
+    <table>
+        <thead>
+            <tr>
+                <th>Identifier </th>
+                <th>Name </th>
+                <th>Quantity in stock </th>
+                <th>In Out Put </th>
+                <th>Alter Quantity </th>
+            </tr>
+        </thead>
+        <tbody>
+
+            @foreach (var product in Model[0])
+            {
+                <tr>
+                    <td>
+                        <label>
+                            <input type="hidden" name="ItemOutPut.Product.Id" value="@product.Id"/>@product.Id</label></td>
+                    <td>@product.Name</td>
+                    <td id="quantity_@(product.Id)">@product.Quantity</td>
+
+                    <td><!-- <input type="text" name="ItemOutPut.Quantity" value=""
+                            class=" ui-state-default ui-corner-all ui-button-text-only"  readonly="true"/> -->
+                        <td><a href="#" onclick="decrementaQuantidade(@product.Id)">Decrement Quantity</a></td>
+                    </td>
+
+                    <td><input type="button" value="Edit" id="alter-quantity"
+                        class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only"/>
+                    </td>
+                </tr> 
+            }
+            <tr>
+                <td colspan="6">
+                    <input type="button" id="generator-report-out-put" name="GiveOut" value="Make Out Put"
+                        role="button" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only" /></td>
+            </tr>
+            </form>
+        </tbody>
+    </table>
+
+    <div id="dialog-form" title="Alter Quantity">
+        <p class="validateTips">All form fields are required.</p>
+        <form id="OutPuts" name="OutPuts" action="../Product/ProcessGiveOut" method="post">
+            <fieldset>
+                <label for="name">Name</label>
+                <label for="name">Name</label><br />
+                <label for="quantity">Quantity in Out</label>
+                <input type="text" name="quantity" id="quantity" class="text ui-widget-content ui-corner-all" />
+
+            </fieldset>
+        </form>
+    </div>
+
+
+
+</div>
+<!--On here is finish of div out-put-products  -->
+<script type="text/javascript">
+    function atualizaQuantidade(productId) {
+        var elementoQuantidade = $("#quantity_" + productId);
+        elementoQuantidade.html(product.Quantity);
+    }
+    function decrementaQuantidade(productId) {
+        var params = {
+            productId: productId
+        };
+        $.post("@Url.Action("DecrementaQuantidade", "Product")", params, atualizaQuantidade);
+        return false;
+    }
+
+
+    function OpenModal() {
+        $(function () {
+            var quantity = $("#quantity"),
+            allFields = $([]).add(quantity),
+            tips = $(".validateTips");
+            function updateTips(t) {
+                tips
+                .text(t)
+                .addClass("ui-state-highlight");
+                setTimeout(function () {
+                    tips.removeClass("ui-state-highlight", 1500);
+                }, 500);
+            }
+            function checkLength(o, n, min, max) {
+                if (o.val().length > max || o.val().length < min) {
+                    o.addClass("ui-state-error");
+                    updateTips("Length of " + n + " must be between " +
+                    min + " and " + max + ".");
+                    return false;
+                } else {
+                    return true;
+                }
+            }
+            function checkRegexp(o, regexp, n) {
+                if (!(regexp.test(o.val()))) {
+                    o.addClass("ui-state-error");
+                    updateTips(n);
+                    return false;
+                } else {
+                    return true;
+                }
+            }
+            $("#dialog-form").dialog({
+                autoOpen: false,
+                height: 300,
+                width: 350,
+                modal: true,
+                buttons: {
+                    Send: function () {
+                        var bValid =
+                        allFields.removeClass("ui-state-error");
+                        bValid = bValid && checkLength(quantity, "quantity", 1, 16);
+                        bValid = bValid && checkRegexp(quantity, /([0-9])/, "Quantity may consist of 0-9, underscores, begin with a letter.");
+
+                        if (bValid) {
+                            $("#users tbody").append("<tr>" +
+                            "<td>" + quantity.val() + "</td>" +
+                            "</tr>");
+
+                            $('#OutPuts').submit();
+                            $(this).dialog("close");
+
+
+                        }
+
+
+                    },
+                    Cancel: function () {
+                        $(this).dialog("close");
+                    }
+                },
+                close: function () {
+                    allFields.val("").removeClass("ui-state-error");
+                }
+            });
+            $("#alter-quantity")
+            .button()
+            .click(function () {
+                $("#dialog-form").dialog("open");
+            });
+        });
+
+    }
+
+</script>
