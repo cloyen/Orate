@@ -11,8 +11,7 @@
         <thead>
             <tr>
                 <th>Id</th>
-                <th colspan="2">&nbsp;</th>
-                <th>Name of Company</th>
+                <th colspan="2">Name of Company</th>                
                 <th>Date </th>
                 <th>Include Item</th>
             </tr>
@@ -24,18 +23,18 @@
 
                 <td>
                     <label>@Model[0].Id</label>
-                <td>
+                </td>
                 <td>
                     <label>Company:</label>
-                <td>
+                </td><td>
                     <select name="companyId">
                         <option Value="@Model[0].Company.Id">@Model[0].Company.Name </option>
 
                     </select></td>
                 <td>
                     <input type="date" name="date" value="@Model[0].Date" readonly="true"/></td>
-                <td>
-                    <button id="alter-quantity" name="button" class="">+ </button>
+                </td><td>
+                    <input type="button" name="button" id="alter-quantity" value="+" />
                 </td>
 
                 <td>
@@ -48,22 +47,24 @@
 </div>
 <!--On here is finish of div company-choose -->
 
-<div id="dialog-form" title="Alter Quantity">
+<div id="dialog-form" title="Quantity on given outPut">
     <p class="validateTips">All form fields are required.</p>
-    <form id="itemOutPutDialog" name="itemOutPutDialog"  method="post">
-        <fieldset>
-            <label for="quantity">Product</label>
+<ul style="list-style:none;"><fieldset>
+     <form id="itemOutPutDialog" name="itemOutPutDialog"  method="post">
+       <li>
+            <label for="quantityName">Product</label>
 
             <select name="product.Id">
                 @foreach (var product in Model[1])
                          {
                     <option Value="@product.Id">@product.Name </option> }
             </select><br />
-
-            <label for="quantity">Quantity in Out<input type="text" name="quantity" id="quantity" class="text ui-widget-content ui-corner-all" /></label>
-
-        </fieldset>
+           </li><li>
+            <label for="quantityOut">OutPut in ?<input type="text" name="quantity" id="quantity" size="15" class="text ui-widget-content ui-corner-all" /></label>
+            </li>
     </form>
+    </fieldset>
+    </ul>
 </div>
 
 
@@ -102,7 +103,7 @@
         $("#dialog-form").dialog({
             autoOpen: false,
             height: 300,
-            width: 350,
+            width: 400,
             modal: true,
             buttons: {
                 Send: function () {
@@ -128,13 +129,14 @@
             }
         });
        
+        $("#alter-quantity")
+     .button()
+     .click(function () {
+         $("#dialog-form").dialog("open");
+     });
     });
 
-    $("#alter-quantity")
-       .button()
-       .click(function () {
-           $("#dialog-form").dialog("open");
-       });
+  
 
       function atualizaQuantidade(productId) {
         var elementoQuantidade = $("#quantity_" + productId);
