@@ -163,35 +163,20 @@ namespace orate.Controllers
         }
 
 
-        [HttpPost]
-        public ActionResult ProcessItensOut(double productId, double quantity)
+        
+        public JsonResult ProcessItensOut(double productId, double quantity)
         {
             // treatment about update quantity of stock products
             ProductDao dao = ProductDao.GetInstance();
             Product product = dao.GetById(productId);
             //treatment about of save outPut 
-            List<Product> itensOfList = new List<Product>();
-            
-
-            if (Session["itensOfList"] == null)
-            {
-                double qnt = product.Quantity;
-                product.Quantity = qnt - quantity;
-                itensOfList.Add(product);
-                Session["itensOfList"] = itensOfList;
-
-            }
-            else
-                if (Session["itensOfList"] != null)
-                {
-                    double qnt = product.Quantity;
+            double qnt = product.Quantity;
                     product.Quantity = qnt - quantity;
-                    itensOfList = (List<Product>)Session["itensOfList"];
-                    itensOfList.Add(product);
-                    Session["itensOfList"] = itensOfList;
-                }
+                  
 
-            return Json(new { nome = "Rafael", idade = "22" });
+            var p = (new { id = product.Id, name = product.Name, quantity = product.Quantity });
+
+            return Json(p,JsonRequestBehavior.AllowGet);
 
         }
     }

@@ -12,6 +12,12 @@ namespace orate.Models
         public virtual Category Category { get; set; }
         public virtual string Discontinued { get; set; }
         public virtual double Quantity { get; set; }
+    
+    
     }
+
+
+
+
 }
 

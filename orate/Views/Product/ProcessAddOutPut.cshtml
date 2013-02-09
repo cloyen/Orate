@@ -11,7 +11,7 @@
         <thead>
             <tr>
                 <th>Id</th>
-                <th colspan="2">Name of Company</th>                
+                <th colspan="2">Name of Company</th>
                 <th>Date </th>
                 <th>Include Item</th>
             </tr>
@@ -26,7 +26,8 @@
                 </td>
                 <td>
                     <label>Company:</label>
-                </td><td>
+                </td>
+                <td>
                     <select name="companyId">
                         <option Value="@Model[0].Company.Id">@Model[0].Company.Name </option>
 
@@ -45,25 +46,31 @@
         </tbody>
     </table>
 </div>
+<div id="Prod1">
+</div>
+
+
 <!--On here is finish of div company-choose -->
 
 <div id="dialog-form" title="Quantity on given outPut">
     <p class="validateTips">All form fields are required.</p>
-<ul style="list-style:none;"><fieldset>
-     <form id="itemOutPutDialog" name="itemOutPutDialog"  method="post" action="../Product/ProcessItensOut">
-       <li>
-            <label for="quantityName">Product</label>
+    <ul style="list-style: none;">
+        <fieldset>
+            <form id="itemOutPutDialog" name="itemOutPutDialog" method="post" action="../Product/ProcessItensOut">
+                <li>
+                    <label for="quantityName">Product</label>
 
-            <select name="productId">
-                @foreach (var product in Model[1])
-                         {
-                    <option Value="@product.Id" id="product">@product.Name </option> }
-            </select><br />
-           </li><li>
-            <label for="quantityOut">OutPut in ?<input type="text" name="quantity" id="quantity" size="15" class="text ui-widget-content ui-corner-all" /></label>
-            </li>
-    </form>
-    </fieldset>
+                    <select name="productId" id="product">
+                        @foreach (var product in Model[1])
+                        {
+                            <option Value="@product.Id" >@product.Name </option> }
+                    </select><br />
+                </li>
+                <li>
+                    <label for="quantityOut">OutPut in ?<input type="text" name="quantity" id="quantity" size="15" class="text ui-widget-content ui-corner-all" /></label>
+                </li>
+            </form>
+        </fieldset>
     </ul>
 </div>
 
@@ -113,7 +120,7 @@
                     bValid = bValid && checkRegexp(quantity, /([0-9])/, "Quantity may consist of 0-9, underscores, begin with a letter.");
 
                     if (bValid) {
-                        ProcessItens();                        
+                        ProcessItens();
                         $(this).dialog("close");
                     }
                 },
@@ -125,7 +132,7 @@
                 allFields.val("").removeClass("ui-state-error");
             }
         });
-       
+
         $("#alter-quantity")
      .button()
      .click(function () {
@@ -133,26 +140,30 @@
      });
     });
 
-  
+
     function ProcessItens() {
-        var params = {
-            quantity: $("#quantity").val(),
-            productId: $("#product").val()
-        };
-               
         $.ajax({
             type: "POST",
-            url:"@Url.Action("ProcessItensOut")",            
-            success: ProcessItens,
-            data: params,
-            dataType: "html"
-        }).fail(test());
+            url: "@Url.Action("ProcessItensOut", "Product")",
+            success: function(x){
+                atualizaQuantidade(x) 
+            },
+            data: { quantity: $("#quantity").val(), productId: $("#product").val() }            
+        })
+            //.fail(test());
     }
- 
+
+    function atualizaQuantidade(x) {
+        
+           $("#Prod1").append(x.id + " - " + x.name + " - " + x.quantity + "</br>");
+        
+    }
+
+
     function test() {
 
         alert("bobo");
     }
-  
-  
+
+
 </script>

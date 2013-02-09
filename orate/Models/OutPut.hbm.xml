@@ -6,7 +6,7 @@
         <param name="sequence">OUTSIDE_SEQ</param>
       </generator>
     </id>
-    <property name="Date" column="Data" type="DateTime" />
+    <property name="Date" column="Data" type="TimeStamp" />
 
     <bag name="ItemOutPut" cascade="save-update" lazy="false">
       <key column="IDOUTPUT"/>
